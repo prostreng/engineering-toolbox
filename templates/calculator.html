@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head><title>Calculator Tool</title></head>
+<body>
+    <h2>Simple Calculator</h2>
+    <form method="post">
+        <input type="number" step="any" name="num1" required placeholder="First Number">
+        <select name="operation">
+            <option value="add">+</option>
+            <option value="subtract">-</option>
+            <option value="multiply">*</option>
+            <option value="divide">/</option>
+        </select>
+        <input type="number" step="any" name="num2" required placeholder="Second Number">
+        <button type="submit">Calculate</button>
+    </form>
+    {% if result is not none %}
+        <h3>Result: {{ result }}</h3>
+    {% endif %}
+</body>
+</html>

@@ -28,10 +28,10 @@ def home():
 @app.route('/file-filter', methods=['GET', 'POST'])
 def file_filter():
     if request.method == 'POST':
-        shutil.rmtree(UPLOAD_FOLDER)
-        shutil.rmtree(OUTPUT_FOLDER)
-        os.makedirs(UPLOAD_FOLDER)
-        os.makedirs(OUTPUT_FOLDER)
+        shutil.rmtree(UPLOAD_FOLDER, ignore_errors=True)
+        shutil.rmtree(OUTPUT_FOLDER, ignore_errors=True)
+        os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+        os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
         uploaded_file = request.files['zip_file']
         if uploaded_file.filename.endswith('.zip'):
@@ -58,6 +58,28 @@ def file_filter():
 @app.route('/download')
 def download():
     return send_file("FilteredFiles.zip", as_attachment=True)
+
+@app.route('/calculator', methods=['GET', 'POST'])
+def calculator():
+    result = None
+    if request.method == 'POST':
+        try:
+            num1 = float(request.form.get('num1', 0))
+            num2 = float(request.form.get('num2', 0))
+            operation = request.form.get('operation', 'add')
+            if operation == 'add':
+                result = num1 + num2
+            elif operation == 'subtract':
+                result = num1 - num2
+            elif operation == 'multiply':
+                result = num1 * num2
+            elif operation == 'divide' and num2 != 0:
+                result = num1 / num2
+            else:
+                result = 'Error'
+        except:
+            result = 'Error'
+    return render_template('calculator.html', result=result)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
